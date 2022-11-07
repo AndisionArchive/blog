@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Windows系统使用PowerShell时提示无法加载文件，因为在此系统上禁止运行脚本。 | Hexo</title>
+
+  
+  <meta name="author" content="John Doe">
+  
+
+  
+  <meta name="description" content="前言在Windows系统的终端中使用npm相关的脚本，终端有如下错误提示
+123456cnpm : 无法加载文件 C:\Users\Andision\AppData\Roaming\npm\cnpm.ps1，因为在此系统上禁止运行脚本。有关详细信息，请参阅 https:/go.microsoft.c">
+  
+
+  
+  
+  <meta name="keywords" content="PowerShell,Windows">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Windows系统使用PowerShell时提示无法加载文件，因为在此系统上禁止运行脚本。"/>
+
+  <meta property="og:site_name" content="Hexo"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Hexo</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Windows系统使用PowerShell时提示无法加载文件，因为在此系统上禁止运行脚本。</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/11/07/PSSecurityException/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-11-07T07:14:31.000Z">
+          2022-11-07
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在Windows系统的终端中使用npm相关的脚本，终端有如下错误提示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cnpm : 无法加载文件 C:\Users\Andision\AppData\Roaming\npm\cnpm.ps1，因为在此系统上禁止运行脚本。有关详细信息，请参阅 https:/go.microsoft.com/fwlink/?LinkID=135170 中的about_Execution_Policies。</span><br><span class="line">所在位置 行:1 字符: 1</span><br><span class="line">+ cnpm i</span><br><span class="line">+ ~~~~</span><br><span class="line">    + CategoryInfo          : SecurityError: (:) []，PSSecurityException</span><br><span class="line">    + FullyQualifiedErrorId : UnauthorizedAccess</span><br></pre></td></tr></table></figure>
+
+<p><img src="/.com//1.png" alt="PS"></p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><ol>
+<li><p>使用管理员身份运行终端或PowerShell，一种快速的方法是鼠标右键任务栏中的Windows图标，Windows 10 系统选择<code>PowerShell（管理员）</code>，Windows 11 系统选择<code>终端（管理员）</code>。</p>
+<p> <img src="/.com//2.png" alt="PS"></p>
+</li>
+<li><p>在管理员身份运行的终端或PowerShell中输入如下内容并回车。</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set-ExecutionPolicy RemoteSigned</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启终端或PowerShell，即可正常使用。</p>
+</li>
+</ol>
+<h1 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h1><blockquote>
+<p>PowerShell 执行策略是一项安全功能，用于控制 PowerShell 加载配置文件和运行脚本的条件。 此功能有助于防止恶意脚本的执行。</p>
+<p>在 Windows 计算机上，可以为本地计算机、当前用户或特定会话设置执行策略。 还可使用组策略设置为计算机和用户设置执行策略。</p>
+<p>本地计算机和当前用户的执行策略存储在注册表中。 无需在 PowerShell 配置文件中设置执行策略。 特定会话的执行策略仅存储在内存中，并在会话关闭时丢失。</p>
+<p>执行策略不是限制用户操作的安全系统。 例如，当用户无法运行脚本时，用户可以通过在命令行键入脚本内容来轻松绕过策略。 相反，执行策略可帮助用户设置基本规则，并防止他们无意违反这些规则。</p>
+</blockquote>
+<p>通过查阅错误信息中的网址，我们可以得知，Windows客户端默认采用<code>Restricted</code>策略。该策略只允许单个命令，但不允许脚本。因此，我们将策略设置成较为宽松的<code>RemoteSigned</code>即可。各种策略及其对应的安全要求可以查看<a target="_blank" rel="noopener" href="https://go.microsoft.com/fwlink/?LinkID=135170">微软官方文档</a>中的详细介绍。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/PowerShell/">PowerShell</a><a href="/tags/Windows/">Windows</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+
+
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2022 John Doe
+    
+  </p>
+</footer>
+    
+    
+  </div>
+</div>
+</body>
+</html>
